@@ -77,13 +77,13 @@ function(reason_extract_dep_inc_dirs_to_target TARGET_NAME DEP)
     endforeach()
   endfunction()
 
-  get_target_property(TARGET_TYPE "${TARGET_NAME}" "TYPE")
-  reason_verbose("${TARGET_NAME} properties: [type=${TARGET_TYPE}]")
+  get_target_property(DEP_TYPE "${DEP}" "TYPE")
+  reason_verbose("  dependency type: [type=${DEP_TYPE}]")
 
   reason_verbose("  add dep interface include directories: [dep=${DEP}]")
   reason_extract_dep_inc_dirs_to_target_one("${TARGET_NAME}" "${DEP}" "INTERFACE_INCLUDE_DIRECTORIES")
 
-  if(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
+  if(NOT "${DEP_TYPE}" STREQUAL "INTERFACE_LIBRARY")
     reason_verbose("  add dep include directories: [dep=${DEP}]")
     reason_extract_dep_inc_dirs_to_target_one("${TARGET_NAME}" "${DEP}" "INCLUDE_DIRECTORIES")
   endif()
