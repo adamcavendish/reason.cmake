@@ -1,20 +1,3 @@
-function(reason__add_library__add_library TARGET_NAME TYPE SRCS)
-  if("${TYPE}" STREQUAL "STATIC")
-    add_library("${TARGET_NAME}" STATIC "${SRCS}")
-  elseif("${TYPE}" STREQUAL "SHARED")
-    add_library("${TARGET_NAME}" SHARED "${SRCS}")
-  else()
-    reason_message(FATAL_ERROR "reason_add_library has only 2 types: STATIC or SHARED")
-  endif()
-
-  reason_verbose("  add_library():")
-  if(REASON_VERBOSE)
-    foreach(SRC IN LISTS SRCS)
-      reason_verbose("    [src=${SRC}]")
-    endforeach()
-  endif()
-endfunction()
-
 function(reason__add_library__tinclude_dirs TARGET_NAME INC_DIRS)
   reason_verbose("  target_include_directories():")
   foreach(INC_DIR IN LISTS INC_DIRS)
@@ -34,9 +17,8 @@ endfunction()
 
 function(reason__add_library__tlink_libs_s TARGET_NAME LINKS)
   foreach(LINK IN LISTS LINKS)
-    # Handle Dependencies' compile definitions @TODO
-    # Handle Dependencies' include dirs
-    reason_extract_dep_inc_dirs_to_target("${TARGET_NAME}" "${LINK}")
+    # Handle Dependencies' include directories
+    reason_extract_dependency_properties_to_target("${TARGET_NAME}" "${LINK}")
     # Link it finally
     target_link_libraries("${TARGET_NAME}" INTERFACE "${LINK}")
     reason_verbose("  target_link_libraries:")
@@ -46,12 +28,18 @@ endfunction()
 
 function(reason__add_library__tlink_libs_d TARGET_NAME LINKS)
   foreach(LINK IN LISTS LINKS)
-    # Handle Dependencies' compile definitions @TODO
     # Handle Dependencies' include dirs
-    reason_extract_dep_inc_dirs_to_target("${TARGET_NAME}" "${LINK}")
+    reason_extract_dependency_properties_to_target("${TARGET_NAME}" "${LINK}")
     # Link it finally
     target_link_libraries("${TARGET_NAME}" PUBLIC "${LINK}")
     reason_verbose("  target_link_libraries: [public-link=${LINK}]")
+  endforeach()
+endfunction()
+
+function(reason__add_library__compile_define TARGET_NAME DEFINES)
+  target_compile_definitions("${TARGET_NAME}" PRIVATE "${DEFINES}")
+  foreach(DEFINE IN LISTS DEFINES)
+    reason_verbose("  target_compile_definitions: [private-define=${DEFINE}]")
   endforeach()
 endfunction()
 
@@ -85,7 +73,7 @@ endmacro()
 function(reason_add_library)
   set(options HELP STATIC SHARED)
   set(one_value_args TARGET)
-  set(mlt_value_args INC_DIRS SRCS LINKS)
+  set(mlt_value_args INC_DIRS SRCS LINKS DEFINES)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
   if(reason_HELP)
@@ -94,9 +82,11 @@ params:
   - STATIC    (BOOL)  : Whether to build static library (the built static lib is named after \"\${TARGET}_s\")
   - SHARED    (BOOL)  : Whether to build shared library (the built shared lib is named after \"\${TARGET}_d\")
   - TARGET    (STRING): The target name
+  - FN        (STRING): The custom `add_executable` function to use (optional)
   - INC_DIRS  (LIST)  : Extra include directories
   - SRCS      (LIST)  : Source files of the library
   - LINKS     (LIST)  : Extra libraries the library should link against
+  - DEFINES   (LIST)  : Extra compile definitions for target
 description:
   'reason_add_library' will build static and shared libraries using '\${TARGET}_s' and '\${TARGET}_d' as their
   corresponding names, if STATIC or SHARED is defined.
@@ -125,7 +115,10 @@ example:
      reason_add_library(TARGET foo STATIC INC_DIRS \"my_foo_include\" SRCS \"src/foo.cpp\")
      # ... other cmake code ...
      add_executable(main 'src/main.cpp')  # where you might do `#include <foo.hpp>`
-     target_link_libraries(main foo_s)      # cmake will automatically include 'my_foo_include' directory for you")
+     target_link_libraries(main foo_s)      # cmake will automatically include 'my_foo_include' directory for you
+  5. Build with extra compile definitions
+     reason_add_library(TARGET foo STATIC SHARED INC_DIRS \"include\" SRCS \"src/foo.cpp\" DEFINES NDEBUG MY_FLAG=1
+")
   endif()
 
   reason_set_check(reason_TARGET "You must specify a TARGET when using 'reason_add_library'")
@@ -134,27 +127,6 @@ example:
     reason_message(FATAL_ERROR "You must specify to build either STATIC or SHARED or both")
   endif()
 
-  # Build static library
-  if(reason_STATIC)
-    reason_verbose("library: [target=${reason_TARGET}_s] [type=STATIC]")
-    reason__add_library__add_library("${reason_TARGET}_s" STATIC "${reason_SRCS}")
-    reason__add_library__tinclude_dirs("${reason_TARGET}_s" "${reason_INC_DIRS}")
-    reason__add_library__tlink_libs_s("${reason_TARGET}_s" "${reason_LINKS}")
-    reason__add_library__use_cotire("${reason_TARGET}_s")
-    reason_unique_target_properties("${reason_TARGET}_s")
-    reason_print_target_properties("${reason_TARGET}_s")
-  endif()
-
-  # Build shared library
-  if(reason_SHARED)
-    reason_verbose("library: [target=${reason_TARGET}_d] [type=SHARED]")
-    reason__add_library__add_library("${reason_TARGET}_d" SHARED "${reason_SRCS}")
-    reason__add_library__tinclude_dirs("${reason_TARGET}_d" "${reason_INC_DIRS}")
-    reason__add_library__tlink_libs_d("${reason_TARGET}_d" "${reason_LINKS}")
-    reason__add_library__use_cotire("${reason_TARGET}_d")
-    reason__add_library__set_shared_lib_version("${reason_TARGET}_d")
-    reason__add_library__set_rpath("${reason_TARGET}_d")
-    reason_unique_target_properties("${reason_TARGET}_d")
-    reason_print_target_properties("${reason_TARGET}_d")
-  endif()
+  reason_util_configure_and_include("reason.add_library.in.cmake" "reason.add_library.out.cmake")
+  reason__add_library__impl()
 endfunction()

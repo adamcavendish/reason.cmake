@@ -21,7 +21,22 @@ endmacro()
 function(reason_message)
   reason_define_colors()
   list(GET ARGV 0 MessageType)
-  if(MessageType STREQUAL FATAL_ERROR OR MessageType STREQUAL SEND_ERROR)
+  if(MessageType STREQUAL HELP)
+    reason_message(AUTHOR_WARNING "reason_message: reasonable cmake message with colors in tty.
+available message type and corresponding colors:
+  - No Type        silver
+  - VERBOSE        fuchsia
+  - STATUS         green
+  - AUTHOR_WARNING aqua
+  - WARNING        yellow
+  - FATAL_ERROR    red
+  - SEND_ERROR     red
+example:
+  1. reason_message(STATUS \"This is a status message (green)\")
+  2. reason_message(\"Simple message in silver.\")
+  3. reason_message(FATAL_ERROR \"An error has occurred ...\")")
+    reason_message(FATAL_ERROR)
+  elseif(MessageType STREQUAL FATAL_ERROR OR MessageType STREQUAL SEND_ERROR)
     list(REMOVE_AT ARGV 0)
     message("${MessageType}" "${c_bred}${ARGV}${c_reset}")
   elseif(MessageType STREQUAL WARNING)
@@ -55,6 +70,11 @@ function(reason_print_help)
   reason_message(FATAL_ERROR)
 endfunction()
 
+function(reason_print_help_file FILE_NAME)
+  file(READ "${FILE_NAME}" HELP_STR)
+  reason_print_help("${HELP_STR}")
+endfunction()
+
 function(reason_util_configure_and_include IN_FILE OUT_FILE)
   set(OUT_FILE_FULL "${CMAKE_BINARY_DIR}/reason.cmake/${OUT_FILE}")
   if(EXISTS OUT_FILE_FULL)
@@ -65,27 +85,26 @@ function(reason_util_configure_and_include IN_FILE OUT_FILE)
   endif()
 endfunction()
 
-function(reason_extract_dep_inc_dirs_to_target TARGET_NAME DEP)
-  function(reason_extract_dep_inc_dirs_to_target_one TARGET_NAME DEP PROP_NAME)
+function(reason_extract_dependency_properties_to_target TARGET_NAME DEP)
+  function(reason_extract_include_dirs TARGET_NAME DEP PROP_NAME)
     get_target_property(props "${DEP}" "${PROP_NAME}")
-    if("${props}" STREQUAL "props-NOTFOUND")
-      return()
+    if(NOT "${props}" STREQUAL "props-NOTFOUND")
+      foreach(prop IN LISTS props)
+        target_include_directories("${TARGET_NAME}" PRIVATE "${prop}")
+        reason_verbose("    [private-include=${v}]")
+      endforeach()
     endif()
-    foreach(prop IN LISTS props)
-      target_include_directories("${TARGET_NAME}" PRIVATE "${prop}")
-      reason_verbose("    [private-include=${v}]")
-    endforeach()
   endfunction()
 
   get_target_property(DEP_TYPE "${DEP}" "TYPE")
   reason_verbose("  dependency type: [type=${DEP_TYPE}]")
 
   reason_verbose("  add dep interface include directories: [dep=${DEP}]")
-  reason_extract_dep_inc_dirs_to_target_one("${TARGET_NAME}" "${DEP}" "INTERFACE_INCLUDE_DIRECTORIES")
+  reason_extract_include_dirs("${TARGET_NAME}" "${DEP}" "INTERFACE_INCLUDE_DIRECTORIES")
 
   if(NOT "${DEP_TYPE}" STREQUAL "INTERFACE_LIBRARY")
     reason_verbose("  add dep include directories: [dep=${DEP}]")
-    reason_extract_dep_inc_dirs_to_target_one("${TARGET_NAME}" "${DEP}" "INCLUDE_DIRECTORIES")
+    reason_extract_include_dirs("${TARGET_NAME}" "${DEP}" "INCLUDE_DIRECTORIES")
   endif()
 endfunction()
 

@@ -25,3 +25,7 @@ include("reason.install")
 include("reason.add_multiple_tests")
 include("reason.pack_deb")
 reason_message(STATUS "reason loaded")
+
+function(reason)
+  reason_print_help_file("README.md")
+endfunction()
