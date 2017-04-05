@@ -11,8 +11,8 @@ description:
   setup rpath, and use cotire if possible
 example:
   1. Simple, mostly used 
-     reason_add_executable(TARGET demo1 SRCS \"src/main.cpp\" INC_DIRS \"include\" LINKS mylib_d)
+     reason_add_executable(TARGET demo1 SRCS "src/main.cpp" INC_DIRS "include" LINKS mylib_d)
   2. executable with extra compile definitions
-     reason_add_executable(TARGET demo1 SRCS \"src/main.cpp\" INC_DIRS \"include\" DEFINES NDEBUG MY_FLAG=1)
+     reason_add_executable(TARGET demo1 SRCS "src/main.cpp" INC_DIRS "include" DEFINES NDEBUG MY_FLAG=1)
   3. Customized 'add_executable' function, i.e. `cuda_add_executable`
-     reason_add_executable(TARGET demo1 SRCS \"src/main.cu\" INC_DIRS \"include\" LINKS mylib_d FN cuda_add_executable)
+     reason_add_executable(TARGET demo1 SRCS "src/main.cu" INC_DIRS "include" LINKS mylib_d FN cuda_add_executable)

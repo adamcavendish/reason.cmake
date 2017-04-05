@@ -7,6 +7,6 @@ description:
   in CMakeLists.txt of other projects to find this package.
 exemple:
 1. Project with headers
-   reason_install(TARGETS \"demo1\" INC_DIRS \"include\")
+   reason_install(TARGETS "demo1" INC_DIRS "include")
 2. Project with no headers
-   reason_install(TARGETS \"demo2\")
+   reason_install(TARGETS "demo2")
