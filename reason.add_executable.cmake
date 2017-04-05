@@ -50,25 +50,7 @@ function(reason_add_executable)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
   if(reason_HELP)
-    reason_print_help("reason_add_executable: reasonable add_executable
-params:
-  - TARGET      (STRING): The target name
-  - FN          (STRING): The custom `add_executable` function to use (optional)
-  - INC_DIRS    (LIST)  : Extra include directories (optional)
-  - SRCS        (LIST)  : Source files of the library
-  - LINKS       (LIST)  : Extra libraries the library should link against (optional)
-  - DEFINES     (LIST)  : Extra compile definitions for target
-description:
-  simply wrap 'add_executable', 'target_include_directories', and 'target_link_libraries'
-  setup rpath, and use cotire if possible
-example:
-  1. Simple, mostly used 
-     reason_add_executable(TARGET demo1 SRCS \"src/main.cpp\" INC_DIRS \"include\" LINKS mylib_d)
-  2. executable with extra compile definitions
-     reason_add_executable(TARGET demo1 SRCS \"src/main.cpp\" INC_DIRS \"include\" DEFINES NDEBUG MY_FLAG=1)
-  3. Customized 'add_executable' function, i.e. `cuda_add_executable`
-     reason_add_executable(TARGET demo1 SRCS \"src/main.cu\" INC_DIRS \"include\" LINKS mylib_d FN cuda_add_executable)
-")
+    reason_print_help_file("${REASON_MODULE_DIR}/reason.add_executable.help")
   endif()
   reason_set_check(reason_TARGET "You must specify a TARGET when using 'reason_add_executable'")
   reason_set_check(reason_SRCS   "You probably forgot to list the sources when using 'reason_add_executable'")

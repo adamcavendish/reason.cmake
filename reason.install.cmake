@@ -16,19 +16,7 @@ function(reason_install)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
   if(reason_HELP)
-    reason_print_help("reason_install: reasonable install
-params:
-  - TARGETS  (LIST): The target names, including all executables, libraries both static and shared
-  - INC_DIRS (LIST): Include directories to install
-description:
-  Automatically generates cmake's config file for you. You might use 'find_package' or 'include'
-  in CMakeLists.txt of other projects to find this package.
-exemple:
-1. Project with headers
-   reason_install(TARGETS \"demo1\" INC_DIRS \"include\")
-2. Project with no headers
-   reason_install(TARGETS \"demo2\")
-")
+    reason_print_help_file("${REASON_MODULE_DIR}/reason.install.help")
   endif()
 
   install(TARGETS ${reason_TARGETS}

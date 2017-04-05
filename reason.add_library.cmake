@@ -77,48 +77,7 @@ function(reason_add_library)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
   if(reason_HELP)
-    reason_print_help("reason_add_library: reasonable add_library
-params:
-  - STATIC    (BOOL)  : Whether to build static library (the built static lib is named after \"\${TARGET}_s\")
-  - SHARED    (BOOL)  : Whether to build shared library (the built shared lib is named after \"\${TARGET}_d\")
-  - TARGET    (STRING): The target name
-  - FN        (STRING): The custom `add_executable` function to use (optional)
-  - INC_DIRS  (LIST)  : Extra include directories
-  - SRCS      (LIST)  : Source files of the library
-  - LINKS     (LIST)  : Extra libraries the library should link against
-  - DEFINES   (LIST)  : Extra compile definitions for target
-description:
-  'reason_add_library' will build static and shared libraries using '\${TARGET}_s' and '\${TARGET}_d' as their
-  corresponding names, if STATIC or SHARED is defined.
-  The shared library is versioned following the project's version
-  You do not need to include the 'INC_DIRS' after libraries are built when linking them since cmake
-  automatically inferred the include directories for you. @see example 4
-example:
-  1. Build both static and shared libraries
-     project(foo VERSION 1.2.3)
-     reason_add_library(TARGET foo STATIC SHARED
-                        INC_DIRS \"include1\" \"include2\" SRCS \"src/foo1.cpp\" \"src/foo2.cpp\"
-                        LINKS ncurses pthread)
-     - 'libfoo_s.a' and 'libfoo_d.so' are built (shared library is versioned [major.minor]
-                                                 following the project version)
-       'libfoo_d.so' --> 'libfoo_d.so.1' --> 'libfoo_d.so.1.2'
-     - 'include1' and 'include2' directory in \${CMAKE_CURRENT_LIST_DIR} are included
-       for target foo (target only include, does not pollute other targets)
-     - links 'libncurses.so' and '-pthread'
-  2. Build only static library
-     reason_add_library(TARGET foo STATIC INC_DIRS \"include\" SRCS \"src/foo.cpp\")
-     - Only 'libfoo_s.a' is built
-  3. Build only shared library
-     reason_add_library(TARGET foo SHARED INC_DIRS \"include\" SRCS \"src/foo.cpp\")
-     - Only 'libfoo_d.so' is built, and correctly versioned
-  4. Build and linked by others
-     reason_add_library(TARGET foo STATIC INC_DIRS \"my_foo_include\" SRCS \"src/foo.cpp\")
-     # ... other cmake code ...
-     add_executable(main 'src/main.cpp')  # where you might do `#include <foo.hpp>`
-     target_link_libraries(main foo_s)      # cmake will automatically include 'my_foo_include' directory for you
-  5. Build with extra compile definitions
-     reason_add_library(TARGET foo STATIC SHARED INC_DIRS \"include\" SRCS \"src/foo.cpp\" DEFINES NDEBUG MY_FLAG=1
-")
+    reason_print_help_file("${REASON_MODULE_DIR}/reason.add_library.help")
   endif()
 
   reason_set_check(reason_TARGET "You must specify a TARGET when using 'reason_add_library'")
