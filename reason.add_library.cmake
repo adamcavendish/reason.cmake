@@ -72,7 +72,7 @@ endmacro()
 
 function(reason_add_library)
   set(options HELP STATIC SHARED)
-  set(one_value_args TARGET)
+  set(one_value_args TARGET FN)
   set(mlt_value_args INC_DIRS SRCS LINKS DEFINES)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
@@ -125,6 +125,12 @@ example:
   reason_set_check(reason_SRCS   "You probably forgot to list the source files when using 'reason_add_library'")
   if((NOT reason_STATIC) AND (NOT reason_SHARED))
     reason_message(FATAL_ERROR "You must specify to build either STATIC or SHARED or both")
+  endif()
+
+  if(reason_FN)
+    set(FN_ADD_LIBRARY "${reason_FN}")
+  else()
+    set(FN_ADD_LIBRARY "add_library")
   endif()
 
   reason_util_configure_and_include("reason.add_library.in.cmake" "reason.add_library.out.cmake")
