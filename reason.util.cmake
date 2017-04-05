@@ -109,7 +109,8 @@ function(reason_print_target_properties TARGET_NAME)
     endif()
   endfunction()
 
-  reason_verbose("${TARGET_NAME} properties:")
+  get_target_property(TARGET_TYPE "${TARGET_NAME}" "TYPE")
+  reason_verbose("${TARGET_NAME} properties: [type=${TARGET_TYPE}]")
 
   # @TODO compile define
   reason_print_target_properties_one("${TARGET_NAME}" "INTERFACE_COMPILE_OPTIONS")
