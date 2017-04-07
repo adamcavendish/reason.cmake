@@ -1,0 +1,26 @@
+``reason.cmake``, Reasonable CMake for C++
+------------------------------------------
+
+Introduction
+------------
+
+CMake is flexible
+~~~~~~~~~~~~~~~~~
+
+CMake is a highly flexible build system, but hard to use.
+
+You might:
+
+1. Manually write many ``custom targets`` to help cmake build up its dependency graph to build anything you like.
+2. Use `ExternalProject` to pull projects from github, build and install to any directory you like
+
+But ...
+
+- Being flexible means being frustrated to get it configured right
+  - You don't know the best practice while having no the time to skim through all approaches
+- Being flexible preserves way too much functionalities, and you're simply writing code to choose what you want indeed
+
+.. _ExternalProject: https://cmake.org/cmake/help/latest/module/ExternalProject.html
+
+What ``reason.cmake`` can and cannot solve
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
