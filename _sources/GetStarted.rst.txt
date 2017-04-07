@@ -22,8 +22,9 @@ Setup:
 
       mkdir -p include/demo/
       mkdir -p src/
+      mkdir -p test/
 
-3. Create header and source files
+3. Create header, source and test files
 
    .. code-block:: bash
 
@@ -54,27 +55,74 @@ Setup:
       }
       EOF
 
-.. code-block:: cmake
-   :caption: Simple CMake without modules
-   :name: simple
-   :linenos:
+   .. code-block:: bash
 
-   cmake_minimum_required(VERSION 3.0)
-   project(demo VERSION 1.0.0)
+      cat <<EOF > test/test1.cpp
+      #include <demo/demo.hpp>
+      #include <cassert>
 
-   # Add reason to CMAKE_MODULE_PATH
-   include(reason)
+      int main() {
+        assert(std::string("I'm demo!") == fn_demo());
+      }
+      EOF
 
-   set(PROJECT_SRCS "src/the_main1.cpp" "src/the_main2.cpp")
+      # Just create the second test by copying the test1
+      cp test/test1.cpp test/test2.cpp
 
-   reason_add_library(STATIC SHARED TARGET "demo" INC_DIRS "include" SRCS "${PROJECT_SRCS}" LINKS "pthread")
-   reason_add_executable(TARGET "demo" SRCS "src/main.cpp" LINKS "demo_s")
-   reason_install(TARGETS "demo" "demo_s" "demo_d" INC_DIRS "include")
 
-   # Enable testing for testing submodules
-   reason_add_multiple_tests(TEST_NAME "test_demo" SRCS "test/test1.cpp" "test/test2.cpp" LINKS "demo_s")
-   enable_testing()
+5. Clone ``reason.cmake``
 
-   set(CPACK_GENERATOR "STGZ;TGZ;TZ")
-   reason_pack_deb(CONTACT  "My Name Here <mail@example.com>" ARCH "amd64" DEBDEP "libc6 (>= 2.4)" SECTION  "devel" PRIORITY "optional")
-   include(CPack)
+   .. code-block:: bash
+
+      git clone https://github.com/adamcavendish/reason.cmake.git
+
+4. Create CMakeLists.txt to build the project
+
+   .. code-block:: cmake
+      :caption: Simple CMake without modules
+      :name: simple
+      :linenos:
+
+      # Minimum Required CMake Version is 3.3
+      cmake_minimum_required(VERSION 3.3)
+      project(demo VERSION 1.0.0)
+
+      # Add reason to CMAKE_MODULE_PATH
+      set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/reason.cmake/")
+      # use reason.cmake
+      include(reason)
+
+      set(PROJECT_SRCS "src/the_main1.cpp" "src/the_main2.cpp")
+
+      reason_add_library(STATIC SHARED TARGET "demo" INC_DIRS "include" SRCS "${PROJECT_SRCS}" LINKS "pthread")
+      reason_add_executable(TARGET "demo" SRCS "src/main.cpp" LINKS "demo_s")
+      reason_install(TARGETS "demo" "demo_s" "demo_d" INC_DIRS "include")
+
+      # Enable testing for testing submodules
+      reason_add_multiple_tests(TEST_NAME "test_demo" SRCS "test/test1.cpp" "test/test2.cpp" LINKS "demo_s")
+      enable_testing()
+
+      set(CPACK_GENERATOR "STGZ;TGZ;TZ")
+      reason_pack_deb(CONTACT  "My Name Here <mail@example.com>" ARCH "amd64" DEBDEP "libc6 (>= 2.4)" SECTION  "devel" PRIORITY "optional")
+      include(CPack)
+
+5. The current project tree should look like:
+
+   .. code-block:: bash
+
+      tree .
+
+   .. code-block:: bash
+
+      .
+      ├── CMakeLists.txt
+      ├── include
+      │   └── demo
+      │       └── demo.hpp
+      ├── src
+      │   ├── demo.cpp
+      │   └── main.cpp
+      └── test
+          └── test1.cpp
+
+      4 directories, 5 files

@@ -67,10 +67,11 @@
 <li><p class="first">Create C++ project tree</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir -p include/demo/
 mkdir -p src/
+mkdir -p test/
 </pre></div>
 </div>
 </li>
-<li><p class="first">Create header and source files</p>
+<li><p class="first">Create header, source and test files</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>cat <span class="s">&lt;&lt;EOF &gt; include/demo/demo.hpp</span>
 <span class="s">#pragma once</span>
 <span class="s">#include &lt;string&gt;</span>
@@ -97,8 +98,30 @@ mkdir -p src/
 <span class="s">EOF</span>
 </pre></div>
 </div>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cat <span class="s">&lt;&lt;EOF &gt; test/test1.cpp</span>
+<span class="s">#include &lt;demo/demo.hpp&gt;</span>
+<span class="s">#include &lt;cassert&gt;</span>
+
+<span class="s">int main() {</span>
+<span class="s">  assert(std::string(&quot;I&#39;m demo!&quot;) == fn_demo());</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+
+<span class="c1"># Just create the second test by copying the test1</span>
+cp test/test1.cpp test/test2.cpp
+</pre></div>
+</div>
 </li>
 </ol>
+<ol class="arabic" start="5">
+<li><p class="first">Clone <code class="docutils literal"><span class="pre">reason.cmake</span></code></p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/adamcavendish/reason.cmake.git
+</pre></div>
+</div>
+</li>
+</ol>
+<ol class="arabic" start="4">
+<li><p class="first">Create CMakeLists.txt to build the project</p>
 <div class="literal-block-wrapper docutils container" id="simple">
 <div class="code-block-caption"><span class="caption-text">Simple CMake without modules</span><a class="headerlink" href="#simple" title="Permalink to this code">¶</a></div>
 <div class="highlight-cmake"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -119,10 +142,16 @@ mkdir -p src/
 16
 17
 18
-19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.0</span><span class="p">)</span>
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c"># Minimum Required CMake Version is 3.3</span>
+<span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.3</span><span class="p">)</span>
 <span class="nb">project</span><span class="p">(</span><span class="s">demo</span> <span class="s">VERSION</span> <span class="s">1.0.0</span><span class="p">)</span>
 
 <span class="c"># Add reason to CMAKE_MODULE_PATH</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_MODULE_PATH</span> <span class="o">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="o">}</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/reason.cmake/&quot;</span><span class="p">)</span>
+<span class="c"># use reason.cmake</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">reason</span><span class="p">)</span>
 
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_SRCS</span> <span class="s2">&quot;src/the_main1.cpp&quot;</span> <span class="s2">&quot;src/the_main2.cpp&quot;</span><span class="p">)</span>
@@ -141,6 +170,27 @@ mkdir -p src/
 </pre></div>
 </td></tr></table></div>
 </div>
+</li>
+<li><p class="first">The current project tree should look like:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>tree .
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>.
+├── CMakeLists.txt
+├── include
+│   └── demo
+│       └── demo.hpp
+├── src
+│   ├── demo.cpp
+│   └── main.cpp
+└── <span class="nb">test</span>
+    └── test1.cpp
+
+<span class="m">4</span> directories, <span class="m">5</span> files
+</pre></div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 
