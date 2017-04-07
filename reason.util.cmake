@@ -108,6 +108,7 @@ function(reason_extract_dependency_properties_to_target TARGET_NAME DEP)
 
   list(FIND REASON_EXCLUDE_LINK_DEPENDENCY "${DEP}" DEP_IN_EXCLUDE)
   if("${DEP_IN_EXCLUDE}" STREQUAL "-1")
+    reason_verbose("exclude dependency: [dep=${DEP}"]")
     return()
   endif()
 
