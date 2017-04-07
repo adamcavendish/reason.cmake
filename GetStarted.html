@@ -115,9 +115,10 @@ cp test/test1.cpp test/test2.cpp
 </ol>
 <ol class="arabic" start="5">
 <li><p class="first">Clone <code class="docutils literal"><span class="pre">reason.cmake</span></code></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/adamcavendish/reason.cmake.git
+<div class="highlight-bash"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
+<p>git clone <a class="reference external" href="https://github.com/adamcavendish/reason.cmake.git">https://github.com/adamcavendish/reason.cmake.git</a></p>
 </li>
 </ol>
 <ol class="arabic" start="4">
@@ -145,23 +146,29 @@ cp test/test1.cpp test/test2.cpp
 19
 20
 21
-22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c"># Minimum Required CMake Version is 3.3</span>
+22
+23
+24
+25</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c"># Minimum Required CMake Version is 3.3</span>
 <span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.3</span><span class="p">)</span>
 <span class="nb">project</span><span class="p">(</span><span class="s">demo</span> <span class="s">VERSION</span> <span class="s">1.0.0</span><span class="p">)</span>
+
+<span class="c"># Customize install path, by default it is &#39;/usr/local/&#39; (requires root permission)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_INSTALL_PREFIX</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/install/&quot;</span><span class="p">)</span>
 
 <span class="c"># Add reason to CMAKE_MODULE_PATH</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_MODULE_PATH</span> <span class="o">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="o">}</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/reason.cmake/&quot;</span><span class="p">)</span>
 <span class="c"># use reason.cmake</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">reason</span><span class="p">)</span>
 
-<span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_SRCS</span> <span class="s2">&quot;src/the_main1.cpp&quot;</span> <span class="s2">&quot;src/the_main2.cpp&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_SRCS</span> <span class="s2">&quot;src/demo.cpp&quot;</span><span class="p">)</span>
 
-<span class="nb">reason_add_library</span><span class="p">(</span><span class="s">STATIC</span> <span class="s">SHARED</span> <span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;${PROJECT_SRCS}&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;pthread&quot;</span><span class="p">)</span>
+<span class="nb">reason_add_library</span><span class="p">(</span><span class="s">STATIC</span> <span class="s">SHARED</span> <span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;${PROJECT_SRCS}&quot;</span><span class="p">)</span>
 <span class="nb">reason_add_executable</span><span class="p">(</span><span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;src/main.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
 <span class="nb">reason_install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s2">&quot;demo&quot;</span> <span class="s2">&quot;demo_s&quot;</span> <span class="s2">&quot;demo_d&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span>
 
 <span class="c"># Enable testing for testing submodules</span>
-<span class="nb">reason_add_multiple_tests</span><span class="p">(</span><span class="s">TEST_NAME</span> <span class="s2">&quot;test_demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;test/test1.cpp&quot;</span> <span class="s2">&quot;test/test2.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
+<span class="nb">reason_add_multiple_tests</span><span class="p">(</span><span class="s">TEST_NAME</span> <span class="s2">&quot;test_demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;test/test1.cpp&quot;</span> <span class="s2">&quot;test/test2.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_d&quot;</span><span class="p">)</span>
 <span class="nb">enable_testing</span><span class="p">()</span>
 
 <span class="nb">set</span><span class="p">(</span><span class="s">CPACK_GENERATOR</span> <span class="s2">&quot;STGZ;TGZ;TZ&quot;</span><span class="p">)</span>
@@ -184,9 +191,28 @@ cp test/test1.cpp test/test2.cpp
 │   ├── demo.cpp
 │   └── main.cpp
 └── <span class="nb">test</span>
-    └── test1.cpp
+    ├── test1.cpp
+    └── test2.cpp
 
 <span class="m">4</span> directories, <span class="m">5</span> files
+</pre></div>
+</div>
+</li>
+<li><p class="first">Build the project</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir build/
+<span class="nb">cd</span> build/
+cmake ../
+make -j<span class="k">$(</span>nproc<span class="k">)</span>
+make package <span class="c1"># Create &#39;sh&#39;, &#39;tar.gz&#39;, &#39;Z&#39;, &#39;deb&#39; packages</span>
+make install <span class="c1"># install to &#39;CMAKE_INSTALL_PREFIX&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># Show the install directory</span>
+ls ../install/
+
+<span class="c1"># Install debian package using dpkg (optional)</span>
+<span class="c1"># (Needs root permission)</span>
+sudo dpkg -i ./demo.deb
 </pre></div>
 </div>
 </li>
