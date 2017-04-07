@@ -1,11 +1,8 @@
 Get Started
 -----------
 
-Simple CMake without modules
+Simple Project without modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. role:: bash(code)
-   :language: bash
 
 Setup:
 
@@ -79,7 +76,7 @@ Setup:
 4. Create CMakeLists.txt to build the project
 
    .. code-block:: cmake
-      :caption: Simple CMake without modules
+      :caption: Simple project without modules
       :name: simple
       :linenos:
 
@@ -150,3 +147,10 @@ Setup:
       # Install debian package using dpkg (optional)
       # (Needs root permission)
       sudo dpkg -i ./demo.deb
+
+Advanced Examples
+~~~~~~~~~~~~~~~~~
+
+See example projects here: `ReasonableCMakeForCXX`_
+
+.. _ReasonableCMakeForCXX: https://github.com/adamcavendish/ReasonableCMakeForCXX
