@@ -92,6 +92,8 @@ function(reason_add_library)
     set(FN_ADD_LIBRARY "add_library")
   endif()
 
-  reason_util_configure_and_include("reason.add_library.in.cmake" "reason.add_library.out.cmake")
+  reason_util_configure_and_include(
+    "reason.add_library.in.cmake"
+    "reason.add_library.${FN_ADD_LIBRARY}.out.cmake")
   reason__add_library__impl()
 endfunction()

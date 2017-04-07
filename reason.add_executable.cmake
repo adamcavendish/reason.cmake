@@ -61,6 +61,8 @@ function(reason_add_executable)
     set(FN_ADD_EXECUTABLE "add_executable")
   endif()
 
-  reason_util_configure_and_include("reason.add_executable.in.cmake" "reason.add_executable.out.cmake")
+  reason_util_configure_and_include(
+    "reason.add_executable.in.cmake"
+    "reason.add_executable.${FN_ADD_EXECUTABLE}.out.cmake")
   reason__add_executable__impl()
 endfunction()
