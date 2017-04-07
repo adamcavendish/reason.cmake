@@ -3,11 +3,14 @@ Available properties:
   - REASON_USE_COTIRE (BOOL): whether to use cotire or not (https://github.com/sakra/cotire)
   - REASON_VERBOSE    (BOOL): Show debug information
   - REASON_BRIEF_PATH (BOOL): Use '~' to replace "${CMAKE_SOURCE_DIR}"
-  - REASON_EXCLUDE_LINK_DEPENDENCY (LIST):
+  - REASON_EXCLUDE_PULL_DEPENDENCY (LIST):
       Do not automatically pull the include dirs and links of the dependency into any target that links to it
-      i.e. 'pthread' is not a '.lib/.dll', or '.a/.so' so it does not have any cmake properties,
-           and therefore we should exclude it.
-      default: pthread
+      i.e. You created a target called 'foo', and it includes 'foo_include' directory and links 'pthread'.
+           All of a sudden that you'd like to manually deal with dependencies of 'foo', and asks `reason.cmake` to
+           not to include 'foo_include' and links 'pthread' automatically.
+           Then, you should add a line of code as following:
+             list(APPEND REASON_EXCLUDE_PULL_DEPENDENCY "foo")
+      default: empty
 Available commands:
   - reason_message
   - reason_add_executable

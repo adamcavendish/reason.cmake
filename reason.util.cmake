@@ -106,9 +106,14 @@ function(reason_extract_dependency_properties_to_target TARGET_NAME DEP)
     endif()
   endfunction()
 
-  list(FIND REASON_EXCLUDE_LINK_DEPENDENCY "${DEP}" DEP_IN_EXCLUDE)
+  if(NOT TARGET "${DEP}")
+    reason_verbose("  exclude dependency: [dep=${DEP}] [reason=not a target]")
+    return()
+  endif()
+
+  list(FIND REASON_EXCLUDE_PULL_DEPENDENCY "${DEP}" DEP_IN_EXCLUDE)
   if(NOT "${DEP_IN_EXCLUDE}" STREQUAL "-1")
-    reason_verbose("  exclude dependency: [dep=${DEP}]")
+    reason_verbose("  exclude dependency: [dep=${DEP}] [reason=found in REASON_EXCLUDE_PULL_DEPENDENCY]")
     return()
   endif()
 
