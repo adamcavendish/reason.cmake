@@ -13,7 +13,7 @@ Setup:
 
    .. code-block:: bash
 
-      mkdir demo/
+      mkdir -p demo/
       cd demo/
 
 2. Create C++ project tree
@@ -134,11 +134,12 @@ Setup:
 
    .. code-block:: bash
 
-      mkdir build/
+      mkdir -p build/
       cd build/
       cmake ../
       make -j$(nproc)
-      make package # Create 'sh', 'tar.gz', 'Z', 'deb' packages
+      make test
+      make package # Create 'sh', 'tar.gz', 'tar.Z', 'deb' packages
       make install # install to 'CMAKE_INSTALL_PREFIX'
 
    .. code-block:: bash

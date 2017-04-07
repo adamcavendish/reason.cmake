@@ -59,7 +59,7 @@
 <p>Setup:</p>
 <ol class="arabic">
 <li><p class="first">Create a project</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir demo/
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir -p demo/
 <span class="nb">cd</span> demo/
 </pre></div>
 </div>
@@ -199,11 +199,12 @@ cp test/test1.cpp test/test2.cpp
 </div>
 </li>
 <li><p class="first">Build the project</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir build/
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir -p build/
 <span class="nb">cd</span> build/
 cmake ../
 make -j<span class="k">$(</span>nproc<span class="k">)</span>
-make package <span class="c1"># Create &#39;sh&#39;, &#39;tar.gz&#39;, &#39;Z&#39;, &#39;deb&#39; packages</span>
+make <span class="nb">test</span>
+make package <span class="c1"># Create &#39;sh&#39;, &#39;tar.gz&#39;, &#39;tar.Z&#39;, &#39;deb&#39; packages</span>
 make install <span class="c1"># install to &#39;CMAKE_INSTALL_PREFIX&#39;</span>
 </pre></div>
 </div>
