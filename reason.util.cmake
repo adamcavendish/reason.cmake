@@ -107,7 +107,7 @@ function(reason_extract_dependency_properties_to_target TARGET_NAME DEP)
   endfunction()
 
   list(FIND REASON_EXCLUDE_LINK_DEPENDENCY "${DEP}" DEP_IN_EXCLUDE)
-  if("${DEP_IN_EXCLUDE}" STREQUAL "-1")
+  if(NOT "${DEP_IN_EXCLUDE}" STREQUAL "-1")
     reason_verbose("  exclude dependency: [dep=${DEP}]")
     return()
   endif()
@@ -139,8 +139,6 @@ function(reason_unique_target_properties TARGET_NAME)
   endfunction()
 
   get_target_property(TARGET_TYPE "${TARGET_NAME}" "TYPE")
-  reason_verbose("${TARGET_NAME} properties: [type=${TARGET_TYPE}]")
-
   reason_unique_target_properties_one("${TARGET_NAME}" "INTERFACE_COMPILE_OPTIONS")
   reason_unique_target_properties_one("${TARGET_NAME}" "INTERFACE_INCLUDE_DIRECTORIES")
   reason_unique_target_properties_one("${TARGET_NAME}" "INTERFACE_LINK_LIBRARIES")
