@@ -106,13 +106,13 @@ function(reason_extract_dependency_properties_to_target TARGET_NAME DEP)
     endif()
   endfunction()
 
-  get_target_property(DEP_TYPE "${DEP}" "TYPE")
-  reason_verbose("  dependency type: [type=${DEP_TYPE}]")
-
   list(FIND REASON_EXCLUDE_LINK_DEPENDENCY "${DEP}" DEP_IN_EXCLUDE)
   if("${DEP_IN_EXCLUDE}" STREQUAL "-1")
     return()
   endif()
+
+  get_target_property(DEP_TYPE "${DEP}" "TYPE")
+  reason_verbose("  dependency type: [type=${DEP_TYPE}]")
 
   reason_verbose("  add dep interface include directories: [dep=${DEP}]")
   reason_extract_include_dirs("${TARGET_NAME}" "${DEP}" "INTERFACE_INCLUDE_DIRECTORIES")
