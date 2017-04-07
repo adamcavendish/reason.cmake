@@ -11,6 +11,7 @@ reason: Reasonable CMake for C++
    :caption: Contents:
 
    Introduction
+   GetStarted
    Documentation
 
 

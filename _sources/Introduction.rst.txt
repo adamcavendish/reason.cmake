@@ -23,6 +23,7 @@ What ``reason.cmake`` can and cannot solve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Solve it:
+
 1. Simplify the whole CMake process
 2. Smooth ``CMakeLists.txt`` writing
 3. Unify C++ project structures
@@ -33,6 +34,7 @@ Solve it:
    2. rpm (TODO)
 
 Not solved:
+
 1. C++ language level modules
 
    1. Modules is already proposed for C++ (`Modules`_), but not yet adopted
@@ -43,33 +45,3 @@ Not solved:
 
 .. _Modules: http://open-std.org/JTC1/SC22/WG21/docs/papers/2016/p0143r1.pdf
 .. _Modules in Clang: https://clang.llvm.org/docs/Modules.html
-
-
-Get Started
------------
-
-Simple CMake without modules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: cmake
-   :linenos:
-
-   cmake_minimum_required(VERSION 3.0)
-   project(demo VERSION 1.0.0)
-
-   # Add reason to CMAKE_MODULE_PATH
-   include(reason)
-
-   set(PROJECT_SRCS "src/the_main1.cpp" "src/the_main2.cpp")
-
-   reason_add_library(STATIC SHARED TARGET "demo" INC_DIRS "include" SRCS "${PROJECT_SRCS}" LINKS "pthread")
-   reason_add_executable(TARGET "demo" SRCS "src/main.cpp" LINKS "demo_s")
-   reason_install(TARGETS "demo" "demo_s" "demo_d" INC_DIRS "include")
-
-   # Enable testing for testing submodules
-   reason_add_multiple_tests(TEST_NAME "test_demo" SRCS "test/test1.cpp" "test/test2.cpp" LINKS "demo_s")
-   enable_testing()
-
-   set(CPACK_GENERATOR "STGZ;TGZ;TZ")
-   reason_pack_deb(CONTACT  "My Name Here <mail@example.com>" ARCH "amd64" DEBDEP "libc6 (>= 2.4)" SECTION  "devel" PRIORITY "optional")
-   include(CPack)

@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Get Started &#8212; reason.cmake 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Documentation.html" />
+    <link rel="prev" title="Introduction" href="Introduction.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Documentation.html" title="&lt;no title&gt;"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">reason.cmake 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="get-started">
+<h1>Get Started<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="simple-cmake-without-modules">
+<h2>Simple CMake without modules<a class="headerlink" href="#simple-cmake-without-modules" title="Permalink to this headline">¶</a></h2>
+<p>Setup:</p>
+<ol class="arabic">
+<li><p class="first">Create a project</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir demo/
+<span class="nb">cd</span> demo/
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create C++ project tree</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir -p include/demo/
+mkdir -p src/
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create header and source files</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cat <span class="s">&lt;&lt;EOF &gt; include/demo/demo.hpp</span>
+<span class="s">#pragma once</span>
+<span class="s">#include &lt;string&gt;</span>
+<span class="s">std::string fn_demo();</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cat &lt;&lt;EOF &gt; src/demo.cpp
+<span class="c1">#include &lt;demo/demo.hpp&gt;</span>
+std::string fn_demo<span class="o">()</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="s2">&quot;I&#39;m demo!&quot;</span><span class="p">;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cat &lt;&lt;EOF &gt; src/main.cpp
+<span class="c1">#include &lt;demo/demo.hpp&gt;</span>
+<span class="c1">#include &lt;iostream&gt;</span>
+
+int main<span class="o">()</span> <span class="o">{</span>
+  std::cout &lt;&lt; fn_demo<span class="o">()</span> <span class="s">&lt;&lt; &#39;\n&#39;;</span>
+<span class="s">  return</span> <span class="m">0</span><span class="p">;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="simple">
+<div class="code-block-caption"><span class="caption-text">Simple CMake without modules</span><a class="headerlink" href="#simple" title="Permalink to this code">¶</a></div>
+<div class="highlight-cmake"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.0</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">demo</span> <span class="s">VERSION</span> <span class="s">1.0.0</span><span class="p">)</span>
+
+<span class="c"># Add reason to CMAKE_MODULE_PATH</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">reason</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_SRCS</span> <span class="s2">&quot;src/the_main1.cpp&quot;</span> <span class="s2">&quot;src/the_main2.cpp&quot;</span><span class="p">)</span>
+
+<span class="nb">reason_add_library</span><span class="p">(</span><span class="s">STATIC</span> <span class="s">SHARED</span> <span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;${PROJECT_SRCS}&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;pthread&quot;</span><span class="p">)</span>
+<span class="nb">reason_add_executable</span><span class="p">(</span><span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;src/main.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
+<span class="nb">reason_install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s2">&quot;demo&quot;</span> <span class="s2">&quot;demo_s&quot;</span> <span class="s2">&quot;demo_d&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span>
+
+<span class="c"># Enable testing for testing submodules</span>
+<span class="nb">reason_add_multiple_tests</span><span class="p">(</span><span class="s">TEST_NAME</span> <span class="s2">&quot;test_demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;test/test1.cpp&quot;</span> <span class="s2">&quot;test/test2.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
+<span class="nb">enable_testing</span><span class="p">()</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CPACK_GENERATOR</span> <span class="s2">&quot;STGZ;TGZ;TZ&quot;</span><span class="p">)</span>
+<span class="nb">reason_pack_deb</span><span class="p">(</span><span class="s">CONTACT</span>  <span class="s2">&quot;My Name Here &lt;mail@example.com&gt;&quot;</span> <span class="s">ARCH</span> <span class="s2">&quot;amd64&quot;</span> <span class="s">DEBDEP</span> <span class="s2">&quot;libc6 (&gt;= 2.4)&quot;</span> <span class="s">SECTION</span>  <span class="s2">&quot;devel&quot;</span> <span class="s">PRIORITY</span> <span class="s2">&quot;optional&quot;</span><span class="p">)</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">CPack</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Get Started</a><ul>
+<li><a class="reference internal" href="#simple-cmake-without-modules">Simple CMake without modules</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Documentation.html"
+                        title="next chapter">&lt;no title&gt;</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/GetStarted.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Documentation.html" title="&lt;no title&gt;"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">reason.cmake 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Adam Basfop Cavendish.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>
