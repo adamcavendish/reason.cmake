@@ -40,6 +40,7 @@ Setup:
       std::string fn_demo() {
         return "I'm demo!";
       }
+      EOF
 
    .. code-block:: bash
 
@@ -51,6 +52,7 @@ Setup:
         std::cout << fn_demo() << '\n';
         return 0;
       }
+      EOF
 
 .. code-block:: cmake
    :caption: Simple CMake without modules

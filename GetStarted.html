@@ -78,21 +78,23 @@ mkdir -p src/
 <span class="s">EOF</span>
 </pre></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>cat &lt;&lt;EOF &gt; src/demo.cpp
-<span class="c1">#include &lt;demo/demo.hpp&gt;</span>
-std::string fn_demo<span class="o">()</span> <span class="o">{</span>
-  <span class="k">return</span> <span class="s2">&quot;I&#39;m demo!&quot;</span><span class="p">;</span>
-<span class="o">}</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cat <span class="s">&lt;&lt;EOF &gt; src/demo.cpp</span>
+<span class="s">#include &lt;demo/demo.hpp&gt;</span>
+<span class="s">std::string fn_demo() {</span>
+<span class="s">  return &quot;I&#39;m demo!&quot;;</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
 </pre></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>cat &lt;&lt;EOF &gt; src/main.cpp
-<span class="c1">#include &lt;demo/demo.hpp&gt;</span>
-<span class="c1">#include &lt;iostream&gt;</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cat <span class="s">&lt;&lt;EOF &gt; src/main.cpp</span>
+<span class="s">#include &lt;demo/demo.hpp&gt;</span>
+<span class="s">#include &lt;iostream&gt;</span>
 
-int main<span class="o">()</span> <span class="o">{</span>
-  std::cout &lt;&lt; fn_demo<span class="o">()</span> <span class="s">&lt;&lt; &#39;\n&#39;;</span>
-<span class="s">  return</span> <span class="m">0</span><span class="p">;</span>
-<span class="o">}</span>
+<span class="s">int main() {</span>
+<span class="s">  std::cout &lt;&lt; fn_demo() &lt;&lt; &#39;\n&#39;;</span>
+<span class="s">  return 0;</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
 </pre></div>
 </div>
 </li>
