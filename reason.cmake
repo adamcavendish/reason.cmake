@@ -27,5 +27,5 @@ include("reason.pack_deb")
 reason_message(STATUS "reason loaded")
 
 function(reason)
-  reason_print_help_file("${REASON_MODULE_DIR}/README.md")
+  reason_print_help_file("${REASON_MODULE_DIR}/reason.help")
 endfunction()

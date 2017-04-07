@@ -1,0 +1,16 @@
+reason: Reasonable CMake for C++
+
+Available commands:
+  - reason_message
+  - reason_add_executable
+  - reason_add_interface_library
+  - reason_add_library
+  - reason_add_multiple_tests
+  - reason_install
+  - reason_pack_deb
+
+Show command's own help, i.e:
+  reason(HELP)                 # show this help
+  reason_message(HELP)         # show `reason_message` command's help
+  reason_add_executable(HELP)  # show `reason_add_executable` command's help
+  ...
