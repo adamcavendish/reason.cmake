@@ -63,6 +63,75 @@
 </div>
 <div class="section" id="what-reason-cmake-can-and-cannot-solve">
 <h2>What <code class="docutils literal"><span class="pre">reason.cmake</span></code> can and cannot solve<a class="headerlink" href="#what-reason-cmake-can-and-cannot-solve" title="Permalink to this headline">¶</a></h2>
+<p>Solve it:
+1. Simplify the whole CMake process
+2. Smooth <code class="docutils literal"><span class="pre">CMakeLists.txt</span></code> writing
+3. Unify C++ project structures
+4. Enable modular CMake <code class="docutils literal"><span class="pre">find_pacage</span></code> experience
+5. Build package for package-manager</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>deb</li>
+<li>rpm (TODO)</li>
+</ol>
+</div></blockquote>
+<p>Not solved:
+1. C++ language level modules</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Modules is already proposed for C++ (<a class="reference external" href="http://open-std.org/JTC1/SC22/WG21/docs/papers/2016/p0143r1.pdf">Modules</a>), but not yet adopted</li>
+<li>Clang has already implemented it (<a class="reference external" href="https://clang.llvm.org/docs/Modules.html">Modules in Clang</a>)</li>
+<li>CMake&#8217;s <code class="docutils literal"><span class="pre">find_package</span></code> and <code class="docutils literal"><span class="pre">add_subdirectory</span></code> is not the final solution</li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>ABI incompatibility</li>
+</ol>
+</div>
+</div>
+<div class="section" id="get-started">
+<h1>Get Started<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="simple-cmake-without-modules">
+<h2>Simple CMake without modules<a class="headerlink" href="#simple-cmake-without-modules" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cmake"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.0</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">demo</span> <span class="s">VERSION</span> <span class="s">1.0.0</span><span class="p">)</span>
+
+<span class="c"># Add reason to CMAKE_MODULE_PATH</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">reason</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_SRCS</span> <span class="s2">&quot;src/the_main1.cpp&quot;</span> <span class="s2">&quot;src/the_main2.cpp&quot;</span><span class="p">)</span>
+
+<span class="nb">reason_add_library</span><span class="p">(</span><span class="s">STATIC</span> <span class="s">SHARED</span> <span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;${PROJECT_SRCS}&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;pthread&quot;</span><span class="p">)</span>
+<span class="nb">reason_add_executable</span><span class="p">(</span><span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;src/main.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
+<span class="nb">reason_install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s2">&quot;demo&quot;</span> <span class="s2">&quot;demo_s&quot;</span> <span class="s2">&quot;demo_d&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span>
+
+<span class="c"># Enable testing for testing submodules</span>
+<span class="nb">reason_add_multiple_tests</span><span class="p">(</span><span class="s">TEST_NAME</span> <span class="s2">&quot;test_demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;test/test1.cpp&quot;</span> <span class="s2">&quot;test/test2.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
+<span class="nb">enable_testing</span><span class="p">()</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CPACK_GENERATOR</span> <span class="s2">&quot;STGZ;TGZ;TZ&quot;</span><span class="p">)</span>
+<span class="nb">reason_pack_deb</span><span class="p">(</span><span class="s">CONTACT</span>  <span class="s2">&quot;My Name Here &lt;mail@example.com&gt;&quot;</span> <span class="s">ARCH</span> <span class="s2">&quot;amd64&quot;</span> <span class="s">DEBDEP</span> <span class="s2">&quot;libc6 (&gt;= 2.4)&quot;</span> <span class="s">SECTION</span>  <span class="s2">&quot;devel&quot;</span> <span class="s">PRIORITY</span> <span class="s2">&quot;optional&quot;</span><span class="p">)</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">CPack</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
@@ -79,12 +148,16 @@
 <li><a class="reference internal" href="#what-reason-cmake-can-and-cannot-solve">What <code class="docutils literal"><span class="pre">reason.cmake</span></code> can and cannot solve</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#get-started">Get Started</a><ul>
+<li><a class="reference internal" href="#simple-cmake-without-modules">Simple CMake without modules</a></li>
+</ul>
+</li>
 </ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter"><code class="docutils literal"><span class="pre">reason</span></code>: Reasonable CMake for C++</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">reason: Reasonable CMake for C++</a></li>
       <li>Next: <a href="Documentation.html" title="next chapter">&lt;no title&gt;</a></li>
   </ul></li>
 </ul>
