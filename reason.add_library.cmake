@@ -1,5 +1,5 @@
 function(reason__add_library__tinclude_dirs TARGET_NAME INC_DIRS)
-  reason_verbose("  target_include_directories():")
+  reason_verbose("  target_include_directories:")
   foreach(INC_DIR IN LISTS INC_DIRS)
     # Convert include-dir into absolute path if it's not
     if(IS_ABSOLUTE "${INC_DIR}")

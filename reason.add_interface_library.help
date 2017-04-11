@@ -1,0 +1,17 @@
+reason_add_interface_library: reasonable add interface/header-only library
+params:
+  - TARGET      (STRING): The target name
+  - INC_DIRS    (LIST)  : include directories
+  - HDR_SRCS    (LIST)  : the header sources (if listed, use them as `target_source`,
+                                              else recursive find all files in 'INC_DIRS')
+  - DEFINES     (LIST)  : Extra compile definitions for target (optional)
+description:
+  'reason_add_interface_library' will help you create header-only library as target "${TARGET}"
+  it automatically pulls the include directory if is LINK-ed as dependency with 'target_link_libraries'
+  or reason's links.
+example:
+  1. Simply use all the files in INC_DIRS
+     add_interface_library(TARGET "foo" INC_DIRS "include")
+  2. Specify the header files
+     add_interface_library(TARGET "foo" INC_DIRS "include"
+                           HDR_SRCS "include/foo/hdr1.hpp" "include/foo/hdr2.hpp")

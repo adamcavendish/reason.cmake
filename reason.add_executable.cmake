@@ -1,5 +1,5 @@
 function(reason__add_executable__tinclude_dirs TARGET_NAME INC_DIRS)
-  reason_verbose("  target_include_directories():")
+  reason_verbose("  target_include_directories:")
   # Handle include directories
   foreach(INC_DIR IN LISTS INC_DIRS)
     set(build_interface "${CMAKE_CURRENT_LIST_DIR}/${INC_DIR}")
