@@ -7,7 +7,7 @@ function(reason__add_library__add_library TARGET_NAME TYPE SRCS)
     reason_message(FATAL_ERROR "reason_add_library has only 2 types: STATIC or SHARED")
   endif()
 
-  reason_verbose("  @FN_ADD_LIBRARY@():")
+  reason_verbose("  @FN_ADD_LIBRARY@:")
   if(REASON_VERBOSE)
     foreach(SRC IN LISTS SRCS)
       reason_verbose("    [src=${SRC}]")

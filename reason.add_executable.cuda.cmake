@@ -8,6 +8,32 @@ function(reason__add_executable__add_executable TARGET_NAME SRCS)
   endif()
 endfunction()
 
+macro(reason__extract_INCLUDE_DIRECTORIES_to_CUDA_INCLUDE TARGET_NAME)
+  # Use 'cuda_include_directories' to add include directories
+  get_target_property(props "${TARGET_NAME}" "INCLUDE_DIRECTORIES")
+  if((NOT "${props}" STREQUAL "props-NOTFOUND") AND (NOT "${props}" STREQUAL ""))
+    reason_verbose("  cuda_include_directories:")
+    foreach(prop IN LISTS props)
+      # Removes cmake-generator-expression to raw PATH
+      string(REGEX REPLACE "\\$<.*:" "" prop "${prop}")
+      string(REGEX REPLACE ">" "" prop "${prop}")
+      cuda_include_directories("${prop}")
+      reason_verbose("    ${prop}")
+    endforeach()
+  endif()
+endmacro()
+
+macro(reason__extract_COMPILE_DEFINITIONS_to_NVCC_FLAGS TARGET_NAME)
+  # Use CUDA_NVCC_FLAGS to define compile options
+  get_target_property(props "${TARGET_NAME}" "COMPILE_OPTIONS")
+  if((NOT "${props}" STREQUAL "props-NOTFOUND") AND (NOT "${props}" STREQUAL ""))
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};${props}")
+    string(REGEX REPLACE ";+" ";" CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}")
+    string(REGEX REPLACE ";$" ""  CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}")
+    reason_verbose("  set CUDA_NVCC_FLAGS to: ${CUDA_NVCC_FALGS}")
+  endif()
+endmacro()
+
 function(reason__add_executable__impl)
   function(create_cuda_dummy DUMMY_NAME)
     set(REASON_VERBOSE FALSE)
@@ -28,27 +54,8 @@ function(reason__add_executable__impl)
   set(DUMMY_NAME "${reason_TARGET}__cuda_dummy")
   create_cuda_dummy("${DUMMY_NAME}")
 
-  # Use 'cuda_include_directories' to add include directories
-  get_target_property(props "${DUMMY_NAME}" "INCLUDE_DIRECTORIES")
-  if((NOT "${props}" STREQUAL "props-NOTFOUND") AND (NOT "${props}" STREQUAL ""))
-    reason_verbose("  cuda_include_directories:")
-    foreach(prop IN LISTS props)
-      # Removes cmake-generator-expression to raw PATH
-      string(REGEX REPLACE "\\$<.*:" "" prop "${prop}")
-      string(REGEX REPLACE ">" "" prop "${prop}")
-      cuda_include_directories("${prop}")
-      reason_verbose("    ${prop}")
-    endforeach()
-  endif()
-
-  # Use CUDA_NVCC_FLAGS to define compile options
-  get_target_property(props "${DUMMY_NAME}" "COMPILE_OPTIONS")
-  if((NOT "${props}" STREQUAL "props-NOTFOUND") AND (NOT "${props}" STREQUAL ""))
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};${props}")
-    string(REGEX REPLACE ";+" ";" CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}")
-    string(REGEX REPLACE ";$" ""  CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}")
-    reason_verbose("  set CUDA_NVCC_FLAGS to: ${CUDA_NVCC_FALGS}")
-  endif()
+  reason__extract_INCLUDE_DIRECTORIES_to_CUDA_INCLUDE("${DUMMY_NAME}")
+  reason__extract_COMPILE_DEFINITIONS_to_NVCC_FLAGS("${DUMMY_NAME}")
   
   reason__add_executable__add_executable("${reason_TARGET}" "${reason_SRCS}")
   reason__add_executable__tinclude_dirs("${reason_TARGET}" "${reason_INC_DIRS}")

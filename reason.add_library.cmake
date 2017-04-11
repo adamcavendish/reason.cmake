@@ -72,7 +72,7 @@ endmacro()
 
 function(reason_add_library)
   set(options HELP STATIC SHARED)
-  set(one_value_args TARGET FN)
+  set(one_value_args TARGET FN MODE)
   set(mlt_value_args INC_DIRS SRCS LINKS DEFINES)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
@@ -82,8 +82,22 @@ function(reason_add_library)
 
   reason_set_check(reason_TARGET "You must specify a TARGET when using 'reason_add_library'")
   reason_set_check(reason_SRCS   "You probably forgot to list the source files when using 'reason_add_library'")
+  reason_check_incompatible(reason_FN reason_MODE)
+
   if((NOT reason_STATIC) AND (NOT reason_SHARED))
     reason_message(FATAL_ERROR "You must specify to build either STATIC or SHARED or both")
+  endif()
+
+  if(reason_MODE)
+    set(REASON_MODE_FILE "${REASON_MODULE_DIR}/reason.add_library.${reason_MODE}.cmake")
+    if(NOT EXISTS "${REASON_MODE_FILE}")
+      reason_message(FATAL_ERROR "reason mode '${reason_MODE}' for 'reason_add_library' does not exist!")
+    endif()
+
+    reason_verbose("Use MODE=${reason_MODE}")
+    include("${REASON_MODE_FILE}")
+    reason__add_library__impl()
+    return()
   endif()
 
   if(reason_FN)
