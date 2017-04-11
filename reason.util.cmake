@@ -163,7 +163,7 @@ function(reason_show_target_properties LEVEL TARGET_NAME)
 
   function(reason_show_target_properties_one LEVEL TARGET_NAME PROP_NAME)
     get_target_property(props "${TARGET_NAME}" "${PROP_NAME}")
-    if((NOT "${props}" STREQUAL "props-NOTFOUND") AND ("${props}"))
+    if((NOT "${props}" STREQUAL "props-NOTFOUND") AND (NOT "${props}" STREQUAL ""))
       reason_message("${LEVEL}" "  ${PROP_NAME}:")
       foreach(prop IN LISTS props)
         reason_message("${LEVEL}" "    ${prop}")
