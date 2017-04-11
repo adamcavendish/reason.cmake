@@ -1,6 +1,6 @@
 function(reason__add_executable__add_executable TARGET_NAME SRCS)
   @FN_ADD_EXECUTABLE@("${TARGET_NAME}" "${SRCS}")
-  reason_verbose("  @FN_ADD_EXECUTABLE@():")
+  reason_verbose("  @FN_ADD_EXECUTABLE@:")
   if(REASON_VERBOSE)
     foreach(SRC IN LISTS SRCS)
       reason_verbose("    [src=${SRC}]")

@@ -45,7 +45,7 @@ endfunction()
 
 function(reason_add_executable)
   set(options HELP)
-  set(one_value_args TARGET FN)
+  set(one_value_args TARGET FN MODE)
   set(mlt_value_args INC_DIRS SRCS LINKS DEFINES)
   cmake_parse_arguments(reason "${options}" "${one_value_args}" "${mlt_value_args}" "${ARGN}")
 
@@ -54,6 +54,19 @@ function(reason_add_executable)
   endif()
   reason_set_check(reason_TARGET "You must specify a TARGET when using 'reason_add_executable'")
   reason_set_check(reason_SRCS   "You probably forgot to list the sources when using 'reason_add_executable'")
+  reason_check_incompatible(reason_FN reason_MODE)
+
+  if(reason_MODE)
+    set(REASON_MODE_FILE "${REASON_MODULE_DIR}/reason.add_executable.${reason_MODE}.cmake")
+    if(NOT EXISTS "${REASON_MODE_FILE}")
+      reason_message(FATAL_ERROR "reason mode '${reason_MODE}' for 'reason_add_executable' does not exist!")
+    endif()
+
+    reason_verbose("Use MODE=${reason_MODE}")
+    include("${REASON_MODE_FILE}")
+    reason__add_executable__impl()
+    return()
+  endif()
 
   if(reason_FN)
     set(FN_ADD_EXECUTABLE "${reason_FN}")
