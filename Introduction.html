@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Get Started" href="GetStarted.html" />
-    <link rel="prev" title="reason: Reasonable CMake for C++" href="index.html" />
+    <link rel="prev" title="reason.cmake" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -69,7 +69,8 @@
 <li>Smooth <code class="docutils literal"><span class="pre">CMakeLists.txt</span></code> writing</li>
 <li>Unify C++ project structures</li>
 <li>Enable modular CMake <code class="docutils literal"><span class="pre">find_pacage</span></code> experience</li>
-<li>Build package for package-manager<ol class="arabic">
+<li>Free programmers from remembering the <code class="docutils literal"><span class="pre">include-directories</span></code> and <code class="docutils literal"><span class="pre">extra</span> <span class="pre">link</span></code> dependencies</li>
+<li>Automatically build package for package-manager<ol class="arabic">
 <li>deb</li>
 <li>rpm (TODO)</li>
 </ol>
@@ -86,6 +87,123 @@
 <li>ABI incompatibility</li>
 </ol>
 </div>
+<div class="section" id="convensions">
+<h2>Convensions<a class="headerlink" href="#convensions" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>reason_install<ul>
+<li>reason uses <code class="docutils literal"><span class="pre">Unix</span> <span class="pre">Directory</span> <span class="pre">Tree</span> <span class="pre">Convension</span></code><ul>
+<li><code class="docutils literal"><span class="pre">bin</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">for</span> <span class="pre">executables</span></code></li>
+<li><code class="docutils literal"><span class="pre">include</span>&#160; <span class="pre">#</span> <span class="pre">for</span> <span class="pre">header</span> <span class="pre">files</span></code></li>
+<li><code class="docutils literal"><span class="pre">lib</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">for</span> <span class="pre">static</span> <span class="pre">and</span> <span class="pre">shared</span> <span class="pre">libraries</span></code></li>
+<li><code class="docutils literal"><span class="pre">share</span>&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">CMake</span> <span class="pre">package</span> <span class="pre">info</span> <span class="pre">for</span> <span class="pre">find_package</span></code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>reason_add_library<ol class="arabic">
+<li>Specify <code class="docutils literal"><span class="pre">STATIC</span></code> to build <code class="docutils literal"><span class="pre">${TARGET}_s</span></code> as static library</li>
+<li>Specify <code class="docutils literal"><span class="pre">SHARED</span></code> to build <code class="docutils literal"><span class="pre">${TARGET}_d</span></code> as dynamic library</li>
+<li>Both for building both</li>
+</ol>
+</li>
+</ol>
+<p>3. Parameter <code class="docutils literal"><span class="pre">INC_DIRS</span></code> in <code class="docutils literal"><span class="pre">reason_add_executable</span></code>, <code class="docutils literal"><span class="pre">reason_add_library</span></code> and <code class="docutils literal"><span class="pre">reaso</span>
+<span class="pre">n_install</span></code></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>reason will use <code class="docutils literal"><span class="pre">target_include_directories</span></code> to include these dirs for the target to build only. No other targets will be polluted.</li>
+<li><code class="docutils literal"><span class="pre">reason_install</span></code> will copy all files and directories in these directories</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="typical-reason-cmake-c-project">
+<h2>Typical reason.cmake C++ project<a class="headerlink" href="#typical-reason-cmake-c-project" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>A C++ project with internal dependencies</li>
+</ol>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>Foo
+├── CMakeLists.txt
+├── deps
+│   ├── module1
+│   │   ├── CMakeLists.txt
+│   │   ├── include
+│   │   │   └── module1
+│   │   │       └── ... // ... headers for module 1 ...
+│   │   ├── src
+│   │   │   └── ...     // ... module 1 source files ...
+│   │   └── test
+│   │       └── ...     // ... module 1 test files ...
+│   ├── module2
+│   │   ├── CMakeLists.txt
+│   │   ├── include
+│   │   ├── src
+│   │   └── test
+│   └── ...             // ... many other modules ...
+├── include
+│   └── foo
+│       └── ...         // ... the projects&#39;s headers ...
+├── src                 // ... project&#39;s source ...
+└── test                // ... project&#39;s test ...
+</pre></div>
+</div>
+<ul>
+<li><p class="first">Declare <code class="docutils literal"><span class="pre">Foo</span></code> project to depend on <code class="docutils literal"><span class="pre">module1</span></code> with one command:</p>
+<div class="highlight-cmake"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">module1</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">You can automatically include dependencies&#8217; <code class="docutils literal"><span class="pre">include-directories</span></code>, and link to <code class="docutils literal"><span class="pre">link-libraries</span></code> via simply <code class="docutils literal"><span class="pre">LINKS</span></code>:</p>
+<div class="highlight-cmake"><div class="highlight"><pre><span></span><span class="c"># Just &#39;LINKS&#39; module1_s, and reason will help you find out</span>
+<span class="c"># what directories &#39;module1_s&#39; includes and what libraries</span>
+<span class="c"># it links</span>
+<span class="nb">reason_add_library</span><span class="p">(</span><span class="s">STATIC</span> <span class="s">foo</span> <span class="s">SRC</span> <span class="s2">&quot;src/foo_src.cpp&quot;</span> <span class="s">LINKS</span> <span class="s">module1_s</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>A C++ project with cross dependencies</li>
+</ol>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>Foo-project
+├── CMakeLists.txt   // just use &#39;add_subdirectory&#39; to specify the build sequence
+│   common
+│   ├── CMakeLists.txt
+│   ├── include
+│   │   └── common
+│   │       └── ...  // ... headers for module common ...
+│   ├── src
+│   │   └── ...      // ... module common source files ...
+│   └── test
+│       └── ...      // ... module common test files ...
+├── Bar-project      // ... some projects like Foo project specified in 1
+│   ├── CMakeLists.txt
+│   ├── deps         // ... other internal deps ...
+│   ├── include
+│   ├── src
+│   └── test
+├── Baz-project
+│   ├── CMakeLists.txt
+│   └── ...          // ... other directories ...
+└── ...              // ... other projects ...
+</pre></div>
+</div>
+<ul>
+<li><p class="first">Use <code class="docutils literal"><span class="pre">add_subdirectory</span></code> in the top <code class="docutils literal"><span class="pre">CMakeLists.txt</span></code> to specify the dependency sequence</p>
+<ul class="simple">
+<li>for example, add <code class="docutils literal"><span class="pre">common</span></code> first</li>
+</ul>
+</li>
+<li><p class="first">For <code class="docutils literal"><span class="pre">Bar-project</span></code>, you may just <code class="docutils literal"><span class="pre">LINKS</span></code>  <code class="docutils literal"><span class="pre">common_s</span></code>, or <code class="docutils literal"><span class="pre">common_d</span></code>:</p>
+<div class="highlight-cmake"><div class="highlight"><pre><span></span><span class="nb">reason_add_executable</span><span class="p">(</span><span class="s">TARGET</span> <span class="s2">&quot;bar&quot;</span> <span class="s">SRC</span> <span class="s2">&quot;src/main.cpp&quot;</span> <span class="s">LINKS</span> <span class="s">common_s</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -99,6 +217,8 @@
 <li><a class="reference internal" href="#">Introduction</a><ul>
 <li><a class="reference internal" href="#cmake-is-flexible">CMake is flexible</a></li>
 <li><a class="reference internal" href="#what-reason-cmake-can-and-cannot-solve">What <code class="docutils literal"><span class="pre">reason.cmake</span></code> can and cannot solve</a></li>
+<li><a class="reference internal" href="#convensions">Convensions</a></li>
+<li><a class="reference internal" href="#typical-reason-cmake-c-project">Typical reason.cmake C++ project</a></li>
 </ul>
 </li>
 </ul>
@@ -106,7 +226,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">reason: Reasonable CMake for C++</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">reason.cmake</a></li>
       <li>Next: <a href="GetStarted.html" title="next chapter">Get Started</a></li>
   </ul></li>
 </ul>
