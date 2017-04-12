@@ -1,0 +1,3 @@
+[submodule "reason.cmake"]
+	path = reason.cmake
+	url = https://github.com/adamcavendish/reason.cmake

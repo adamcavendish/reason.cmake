@@ -3,19 +3,22 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-``reason.cmake``: Reasonable CMake for C++
-==========================================
+reason.cmake
+============
+
+Reasonable CMake for C++
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    Introduction
+   GetStarted
    Documentation
 
 
 Indices and tables
-==================
+~~~~~~~~~~~~~~~~~~
 
-* :ref:`genindex`
 * :ref:`search`
