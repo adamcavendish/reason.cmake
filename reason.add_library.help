@@ -4,6 +4,8 @@ params:
   - SHARED    (BOOL)  : Whether to build shared library (the built shared lib is named after "${TARGET}_d")
   - TARGET    (STRING): The target name
   - FN        (STRING): The custom `add_executable` function to use (optional)
+  - MODE      (STRING): The modes you would like to specify reason to build,
+                        currently available: [cuda]
   - INC_DIRS  (LIST)  : Extra include directories
   - SRCS      (LIST)  : Source files of the library
   - LINKS     (LIST)  : Extra libraries the library should link against
@@ -39,3 +41,7 @@ example:
      target_link_libraries(main foo_s)      # cmake will automatically include 'my_foo_include' directory for you
   5. Build with extra compile definitions
      reason_add_library(TARGET foo STATIC SHARED INC_DIRS "include" SRCS "src/foo.cpp" DEFINES NDEBUG MY_FLAG=1
+  6. Customized 'add_library' function, i.e. `dummy_add_library`
+     reason_add_library(TARGET foo STATIC SHARED INC_DIRS "include" SRCS "src/foo.cpp" FN dummy_add_library)
+  7. Use reason to build CUDA project
+     reason_add_library(MODE cuda TARGET demo1 SRCS "src/main.cu" INC_DIRS "include" LINKS my_cuda_util_s)
