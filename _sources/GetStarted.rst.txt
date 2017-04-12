@@ -2,7 +2,7 @@ Get Started
 -----------
 
 Simple Project without modules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Setup:
 
@@ -76,34 +76,45 @@ Setup:
 4. Create CMakeLists.txt to build the project
 
    .. code-block:: cmake
-      :caption: Simple project without modules
       :name: simple
-      :linenos:
 
       # Minimum Required CMake Version is 3.3
       cmake_minimum_required(VERSION 3.3)
       project(demo VERSION 1.0.0)
 
-      # Customize install path, by default it is '/usr/local/' (requires root permission)
+      # Customize install path, by default it is '/usr/local/',
+      # which requires root permission
       set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install/")
 
       # Add reason to CMAKE_MODULE_PATH
-      set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/reason.cmake/")
+      list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/reason.cmake/")
       # use reason.cmake
       include(reason)
 
       set(PROJECT_SRCS "src/demo.cpp")
 
-      reason_add_library(STATIC SHARED TARGET "demo" INC_DIRS "include" SRCS "${PROJECT_SRCS}")
+      reason_add_library(
+        STATIC SHARED # build both static and shared library
+        TARGET "demo"
+        INC_DIRS "include"
+        SRCS "${PROJECT_SRCS}")
       reason_add_executable(TARGET "demo" SRCS "src/main.cpp" LINKS "demo_s")
       reason_install(TARGETS "demo" "demo_s" "demo_d" INC_DIRS "include")
 
       # Enable testing for testing submodules
-      reason_add_multiple_tests(TEST_NAME "test_demo" SRCS "test/test1.cpp" "test/test2.cpp" LINKS "demo_d")
+      reason_add_multiple_tests(
+        TEST_NAME "test_demo"
+        SRCS "test/test1.cpp" "test/test2.cpp"
+        LINKS "demo_d")
       enable_testing()
 
       set(CPACK_GENERATOR "STGZ;TGZ;TZ")
-      reason_pack_deb(CONTACT  "My Name Here <mail@example.com>" ARCH "amd64" DEBDEP "libc6 (>= 2.4)" SECTION  "devel" PRIORITY "optional")
+      reason_pack_deb(
+        CONTACT  "My Name Here <mail@example.com>"
+        ARCH     "amd64"
+        DEBDEP   "libc6 (>= 2.4)"
+        SECTION  "devel"
+        PRIORITY "optional")
       include(CPack)
 
 5. The current project tree should look like:
@@ -147,6 +158,23 @@ Setup:
       # Install debian package using dpkg (optional)
       # (Needs root permission)
       sudo dpkg -i ./demo.deb
+
+Getting Help Information
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Normally you would like to know how to use a cmake function, but you know that cmake functions does not provide help generally.
+
+But **reason.cmake has help!**
+
+Use :code:``reason(HELP)``, ``reason_add_executable(HELP)`` .. to show help information,
+
+for example:
+
+.. image:: ./images/show_help.png
+   :alt: reason.cmake shows you the help!
+   :align: center
+   :target: https://asciinema.org/a/112813
+
 
 Advanced Examples
 ~~~~~~~~~~~~~~~~~

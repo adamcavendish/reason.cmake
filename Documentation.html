@@ -6,9 +6,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &#8212; reason.cmake 0.1.0 documentation</title>
+    <title>Documentation &#8212; reason.cmake 0.1.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,37 +27,200 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Introduction" href="Introduction.html" /> 
+    <link rel="prev" title="Get Started" href="GetStarted.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
   <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="Introduction.html" title="Introduction"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">reason.cmake 0.1.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reason-root-help">
+<h2>Reason root help<a class="headerlink" href="#reason-root-help" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>reason: Reasonable CMake for C++
+Available properties:
+  - REASON_USE_COTIRE (BOOL): whether to use cotire or not (https://github.com/sakra/cotire)
+  - REASON_VERBOSE    (BOOL): Show debug information
+  - REASON_BRIEF_PATH (BOOL): Use &#39;~&#39; to replace &quot;${CMAKE_SOURCE_DIR}&quot;
+  - REASON_EXCLUDE_PULL_DEPENDENCY (LIST):
+      Do not automatically pull the include dirs and links of the dependency into any target that links to it
+      i.e. You created a target called &#39;foo&#39;, and it includes &#39;foo_include&#39; directory and links &#39;pthread&#39;.
+           All of a sudden that you&#39;d like to manually deal with dependencies of &#39;foo&#39;, and asks `reason.cmake` to
+           not to include &#39;foo_include&#39; and links &#39;pthread&#39; automatically.
+           Then, you should add a line of code as following:
+             list(APPEND REASON_EXCLUDE_PULL_DEPENDENCY &quot;foo&quot;)
+      default: empty
+Available commands:
+  - reason_message
+  - reason_add_executable
+  - reason_add_interface_library
+  - reason_add_library
+  - reason_add_multiple_tests
+  - reason_install
+  - reason_pack_deb
+Show command&#39;s own help, i.e:
+  reason(HELP)                 # show this help
+  reason_message(HELP)         # show `reason_message` command&#39;s help
+  reason_add_executable(HELP)  # show `reason_add_executable` command&#39;s help
+  ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="reason-add-executable">
+<h2>reason_add_executable<a class="headerlink" href="#reason-add-executable" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>reason_add_executable: reasonable add_executable
+params:
+  - TARGET      (STRING): The target name
+  - FN          (STRING): The custom `add_executable` function to use (optional)
+  - MODE        (STRING): The modes you would like to specify reason to build,
+                          currently available: [cuda]
+  - INC_DIRS    (LIST)  : Extra include directories (optional)
+  - SRCS        (LIST)  : Source files of the library
+  - LINKS       (LIST)  : Extra libraries the library should link against (optional)
+  - DEFINES     (LIST)  : Extra compile definitions for target
+description:
+  simply wrap &#39;add_executable&#39;, &#39;target_include_directories&#39;, and &#39;target_link_libraries&#39;
+  setup rpath, and use cotire if possible
+example:
+  1. Simple, mostly used 
+     reason_add_executable(TARGET demo1 SRCS &quot;src/main.cpp&quot; INC_DIRS &quot;include&quot; LINKS mylib_d)
+  2. executable with extra compile definitions
+     reason_add_executable(TARGET demo1 SRCS &quot;src/main.cpp&quot; INC_DIRS &quot;include&quot; DEFINES NDEBUG MY_FLAG=1)
+  3. Customized &#39;add_executable&#39; function, i.e. `dummy_add_executable`
+     reason_add_executable(TARGET demo1 SRCS &quot;src/main.cpp&quot; INC_DIRS &quot;include&quot; LINKS mylib_d FN dummy_add_executable)
+  4. Use reason to build CUDA project
+     reason_add_executable(MODE cuda TARGET demo1 SRCS &quot;src/main.cu&quot; INC_DIRS &quot;include&quot; LINKS my_cuda_util_s)
+</pre></div>
+</div>
+</div>
+<div class="section" id="reason-add-interface-library">
+<h2>reason_add_interface_library<a class="headerlink" href="#reason-add-interface-library" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>reason_add_interface_library: reasonable add interface/header-only library
+params:
+  - TARGET      (STRING): The target name
+  - INC_DIRS    (LIST)  : include directories
+  - HDR_SRCS    (LIST)  : the header sources (if listed, use them as `target_source`,
+                                              else recursive find all files in &#39;INC_DIRS&#39;)
+  - DEFINES     (LIST)  : Extra compile definitions for target (optional)
+description:
+  &#39;reason_add_interface_library&#39; will help you create header-only library as target &quot;${TARGET}&quot;
+  it automatically pulls the include directory if is LINK-ed as dependency with &#39;target_link_libraries&#39;
+  or reason&#39;s links.
+example:
+  1. Simply use all the files in INC_DIRS
+     add_interface_library(TARGET &quot;foo&quot; INC_DIRS &quot;include&quot;)
+  2. Specify the header files
+     add_interface_library(TARGET &quot;foo&quot; INC_DIRS &quot;include&quot;
+                           HDR_SRCS &quot;include/foo/hdr1.hpp&quot; &quot;include/foo/hdr2.hpp&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="reason-add-library">
+<h2>reason_add_library<a class="headerlink" href="#reason-add-library" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>reason_add_library: reasonable add_library
+params:
+  - STATIC    (BOOL)  : Whether to build static library (the built static lib is named after &quot;${TARGET}_s&quot;)
+  - SHARED    (BOOL)  : Whether to build shared library (the built shared lib is named after &quot;${TARGET}_d&quot;)
+  - TARGET    (STRING): The target name
+  - FN        (STRING): The custom `add_executable` function to use (optional)
+  - MODE      (STRING): The modes you would like to specify reason to build,
+                        currently available: [cuda]
+  - INC_DIRS  (LIST)  : Extra include directories
+  - SRCS      (LIST)  : Source files of the library
+  - LINKS     (LIST)  : Extra libraries the library should link against
+  - DEFINES   (LIST)  : Extra compile definitions for target
+description:
+  &#39;reason_add_library&#39; will build static and shared libraries using &#39;${TARGET}_s&#39; and &#39;${TARGET}_d&#39; as their
+  corresponding names, if STATIC or SHARED is defined.
+  The shared library is versioned following the project&#39;s version
+  You do not need to include the &#39;INC_DIRS&#39; after libraries are built when linking them since cmake
+  automatically inferred the include directories for you. @see example 4
+example:
+  1. Build both static and shared libraries
+     project(foo VERSION 1.2.3)
+     reason_add_library(TARGET foo STATIC SHARED
+                        INC_DIRS &quot;include1&quot; &quot;include2&quot; SRCS &quot;src/foo1.cpp&quot; &quot;src/foo2.cpp&quot;
+                        LINKS ncurses pthread)
+     - &#39;libfoo_s.a&#39; and &#39;libfoo_d.so&#39; are built (shared library is versioned [major.minor]
+                                                 following the project version)
+       &#39;libfoo_d.so&#39; --&gt; &#39;libfoo_d.so.1&#39; --&gt; &#39;libfoo_d.so.1.2&#39;
+     - &#39;include1&#39; and &#39;include2&#39; directory in ${CMAKE_CURRENT_LIST_DIR} are included
+       for target foo (target only include, does not pollute other targets)
+     - links &#39;libncurses.so&#39; and &#39;-pthread&#39;
+  2. Build only static library
+     reason_add_library(TARGET foo STATIC INC_DIRS &quot;include&quot; SRCS &quot;src/foo.cpp&quot;)
+     - Only &#39;libfoo_s.a&#39; is built
+  3. Build only shared library
+     reason_add_library(TARGET foo SHARED INC_DIRS &quot;include&quot; SRCS &quot;src/foo.cpp&quot;)
+     - Only &#39;libfoo_d.so&#39; is built, and correctly versioned
+  4. Build and linked by others
+     reason_add_library(TARGET foo STATIC INC_DIRS &quot;my_foo_include&quot; SRCS &quot;src/foo.cpp&quot;)
+     # ... other cmake code ...
+     add_executable(main &#39;src/main.cpp&#39;)  # where you might do `#include &lt;foo.hpp&gt;`
+     target_link_libraries(main foo_s)      # cmake will automatically include &#39;my_foo_include&#39; directory for you
+  5. Build with extra compile definitions
+     reason_add_library(TARGET foo STATIC SHARED INC_DIRS &quot;include&quot; SRCS &quot;src/foo.cpp&quot; DEFINES NDEBUG MY_FLAG=1
+  6. Customized &#39;add_library&#39; function, i.e. `dummy_add_library`
+     reason_add_library(TARGET foo STATIC SHARED INC_DIRS &quot;include&quot; SRCS &quot;src/foo.cpp&quot; FN dummy_add_library)
+  7. Use reason to build CUDA project
+     reason_add_library(MODE cuda TARGET demo1 SRCS &quot;src/main.cu&quot; INC_DIRS &quot;include&quot; LINKS my_cuda_util_s)
+</pre></div>
+</div>
+</div>
+<div class="section" id="reason-install">
+<h2>reason_install<a class="headerlink" href="#reason-install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>reason_install: reasonable install
+params:
+  - TARGETS  (LIST): The target names, including all executables, libraries both static and shared
+  - INC_DIRS (LIST): Include directories to install
+description:
+  Automatically generates cmake&#39;s config file for you. You might use &#39;find_package&#39; or &#39;include&#39;
+  in CMakeLists.txt of other projects to find this package.
+exemple:
+1. Project with headers
+   reason_install(TARGETS &quot;demo1&quot; INC_DIRS &quot;include&quot;)
+2. Project with no headers
+   reason_install(TARGETS &quot;demo2&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Introduction.html"
-                        title="previous chapter">Introduction</a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Documentation</a><ul>
+<li><a class="reference internal" href="#reason-root-help">Reason root help</a></li>
+<li><a class="reference internal" href="#reason-add-executable">reason_add_executable</a></li>
+<li><a class="reference internal" href="#reason-add-interface-library">reason_add_interface_library</a></li>
+<li><a class="reference internal" href="#reason-add-library">reason_add_library</a></li>
+<li><a class="reference internal" href="#reason-install">reason_install</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="GetStarted.html" title="previous chapter">Get Started</a></li>
+  </ul></li>
+</ul>
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -79,21 +242,20 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="Introduction.html" title="Introduction"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">reason.cmake 0.1.0 documentation</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2017, Adam Basfop Cavendish.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/Documentation.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Adam Basfop Cavendish.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
-    </div>
+
+    
+
+    
   </body>
 </html>

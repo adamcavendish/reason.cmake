@@ -8,7 +8,7 @@
     
     <title>Get Started &#8212; reason.cmake 0.1.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -28,24 +28,16 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="&lt;no title&gt;" href="Documentation.html" />
-    <link rel="prev" title="Introduction" href="Introduction.html" /> 
+    <link rel="prev" title="Introduction" href="Introduction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
   <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="Documentation.html" title="&lt;no title&gt;"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="Introduction.html" title="Introduction"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">reason.cmake 0.1.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -123,59 +115,45 @@ cp test/test1.cpp test/test2.cpp
 </ol>
 <ol class="arabic" start="4">
 <li><p class="first">Create CMakeLists.txt to build the project</p>
-<div class="literal-block-wrapper docutils container" id="simple">
-<div class="code-block-caption"><span class="caption-text">Simple project without modules</span><a class="headerlink" href="#simple" title="Permalink to this code">¶</a></div>
-<div class="highlight-cmake"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c"># Minimum Required CMake Version is 3.3</span>
+<div class="highlight-cmake" id="simple"><div class="highlight"><pre><span></span><span class="c"># Minimum Required CMake Version is 3.3</span>
 <span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.3</span><span class="p">)</span>
 <span class="nb">project</span><span class="p">(</span><span class="s">demo</span> <span class="s">VERSION</span> <span class="s">1.0.0</span><span class="p">)</span>
 
-<span class="c"># Customize install path, by default it is &#39;/usr/local/&#39; (requires root permission)</span>
+<span class="c"># Customize install path, by default it is &#39;/usr/local/&#39;,</span>
+<span class="c"># which requires root permission</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_INSTALL_PREFIX</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/install/&quot;</span><span class="p">)</span>
 
 <span class="c"># Add reason to CMAKE_MODULE_PATH</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_MODULE_PATH</span> <span class="o">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="o">}</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/reason.cmake/&quot;</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span> <span class="s">CMAKE_MODULE_PATH</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/reason.cmake/&quot;</span><span class="p">)</span>
 <span class="c"># use reason.cmake</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">reason</span><span class="p">)</span>
 
 <span class="nb">set</span><span class="p">(</span><span class="s">PROJECT_SRCS</span> <span class="s2">&quot;src/demo.cpp&quot;</span><span class="p">)</span>
 
-<span class="nb">reason_add_library</span><span class="p">(</span><span class="s">STATIC</span> <span class="s">SHARED</span> <span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;${PROJECT_SRCS}&quot;</span><span class="p">)</span>
+<span class="nb">reason_add_library</span><span class="p">(</span>
+  <span class="s">STATIC</span> <span class="s">SHARED</span> <span class="c"># build both static and shared library</span>
+  <span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span>
+  <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span>
+  <span class="s">SRCS</span> <span class="s2">&quot;${PROJECT_SRCS}&quot;</span><span class="p">)</span>
 <span class="nb">reason_add_executable</span><span class="p">(</span><span class="s">TARGET</span> <span class="s2">&quot;demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;src/main.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_s&quot;</span><span class="p">)</span>
 <span class="nb">reason_install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s2">&quot;demo&quot;</span> <span class="s2">&quot;demo_s&quot;</span> <span class="s2">&quot;demo_d&quot;</span> <span class="s">INC_DIRS</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span>
 
 <span class="c"># Enable testing for testing submodules</span>
-<span class="nb">reason_add_multiple_tests</span><span class="p">(</span><span class="s">TEST_NAME</span> <span class="s2">&quot;test_demo&quot;</span> <span class="s">SRCS</span> <span class="s2">&quot;test/test1.cpp&quot;</span> <span class="s2">&quot;test/test2.cpp&quot;</span> <span class="s">LINKS</span> <span class="s2">&quot;demo_d&quot;</span><span class="p">)</span>
+<span class="nb">reason_add_multiple_tests</span><span class="p">(</span>
+  <span class="s">TEST_NAME</span> <span class="s2">&quot;test_demo&quot;</span>
+  <span class="s">SRCS</span> <span class="s2">&quot;test/test1.cpp&quot;</span> <span class="s2">&quot;test/test2.cpp&quot;</span>
+  <span class="s">LINKS</span> <span class="s2">&quot;demo_d&quot;</span><span class="p">)</span>
 <span class="nb">enable_testing</span><span class="p">()</span>
 
 <span class="nb">set</span><span class="p">(</span><span class="s">CPACK_GENERATOR</span> <span class="s2">&quot;STGZ;TGZ;TZ&quot;</span><span class="p">)</span>
-<span class="nb">reason_pack_deb</span><span class="p">(</span><span class="s">CONTACT</span>  <span class="s2">&quot;My Name Here &lt;mail@example.com&gt;&quot;</span> <span class="s">ARCH</span> <span class="s2">&quot;amd64&quot;</span> <span class="s">DEBDEP</span> <span class="s2">&quot;libc6 (&gt;= 2.4)&quot;</span> <span class="s">SECTION</span>  <span class="s2">&quot;devel&quot;</span> <span class="s">PRIORITY</span> <span class="s2">&quot;optional&quot;</span><span class="p">)</span>
+<span class="nb">reason_pack_deb</span><span class="p">(</span>
+  <span class="s">CONTACT</span>  <span class="s2">&quot;My Name Here &lt;mail@example.com&gt;&quot;</span>
+  <span class="s">ARCH</span>     <span class="s2">&quot;amd64&quot;</span>
+  <span class="s">DEBDEP</span>   <span class="s2">&quot;libc6 (&gt;= 2.4)&quot;</span>
+  <span class="s">SECTION</span>  <span class="s2">&quot;devel&quot;</span>
+  <span class="s">PRIORITY</span> <span class="s2">&quot;optional&quot;</span><span class="p">)</span>
 <span class="nb">include</span><span class="p">(</span><span class="s">CPack</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
 </div>
 </li>
 <li><p class="first">The current project tree should look like:</p>
@@ -219,6 +197,14 @@ sudo dpkg -i ./demo.deb
 </li>
 </ol>
 </div>
+<div class="section" id="getting-help-information">
+<h2>Getting Help Information<a class="headerlink" href="#getting-help-information" title="Permalink to this headline">¶</a></h2>
+<p>Normally you would like to know how to use a cmake function, but you know that cmake functions does not provide help generally.</p>
+<p>But <strong>reason.cmake has help!</strong></p>
+<p>Use :code:<code class="docutils literal"><span class="pre">reason(HELP)</span></code>, <code class="docutils literal"><span class="pre">reason_add_executable(HELP)</span></code> .. to show help information,</p>
+<p>for example:</p>
+<a class="reference external image-reference" href="https://asciinema.org/a/112813"><img alt="reason.cmake shows you the help!" class="align-center" src="_images/show_help.png" /></a>
+</div>
 <div class="section" id="advanced-examples">
 <h2>Advanced Examples<a class="headerlink" href="#advanced-examples" title="Permalink to this headline">¶</a></h2>
 <p>See example projects here: <a class="reference external" href="https://github.com/adamcavendish/ReasonableCMakeForCXX">ReasonableCMakeForCXX</a></p>
@@ -235,17 +221,20 @@ sudo dpkg -i ./demo.deb
   <ul>
 <li><a class="reference internal" href="#">Get Started</a><ul>
 <li><a class="reference internal" href="#simple-project-without-modules">Simple Project without modules</a></li>
+<li><a class="reference internal" href="#getting-help-information">Getting Help Information</a></li>
 <li><a class="reference internal" href="#advanced-examples">Advanced Examples</a></li>
 </ul>
 </li>
 </ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Introduction.html"
-                        title="previous chapter">Introduction</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Documentation.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Introduction.html" title="previous chapter">Introduction</a></li>
+      <li>Next: <a href="Documentation.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -267,24 +256,20 @@ sudo dpkg -i ./demo.deb
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="Documentation.html" title="&lt;no title&gt;"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="Introduction.html" title="Introduction"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">reason.cmake 0.1.0 documentation</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2017, Adam Basfop Cavendish.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/GetStarted.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Adam Basfop Cavendish.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
-    </div>
+
+    
+
+    
   </body>
 </html>

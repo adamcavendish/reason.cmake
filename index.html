@@ -6,9 +6,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>reason: Reasonable CMake for C++ &#8212; reason.cmake 0.1.0 documentation</title>
+    <title>reason.cmake &#8212; reason.cmake 0.1.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,29 +27,26 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction" href="Introduction.html" /> 
+    <link rel="next" title="Introduction" href="Introduction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
   <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="Introduction.html" title="Introduction"
-             accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">reason.cmake 0.1.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="reason-reasonable-cmake-for-c">
-<h1>reason: Reasonable CMake for C++<a class="headerlink" href="#reason-reasonable-cmake-for-c" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="reason-cmake">
+<h1>reason.cmake<a class="headerlink" href="#reason-cmake" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reasonable-cmake-for-c">
+<h2>Reasonable CMake for C++<a class="headerlink" href="#reasonable-cmake-for-c" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -60,18 +57,27 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="GetStarted.html">Get Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="GetStarted.html#simple-project-without-modules">Simple Project without modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GetStarted.html#getting-help-information">Getting Help Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="GetStarted.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Documentation.html#reason-root-help">Reason root help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Documentation.html#reason-add-executable">reason_add_executable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Documentation.html#reason-add-interface-library">reason_add_interface_library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Documentation.html#reason-add-library">reason_add_library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Documentation.html#reason-install">reason_install</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
+</div>
 </div>
 
 
@@ -82,13 +88,20 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">reason: Reasonable CMake for C++</a></li>
+<li><a class="reference internal" href="#">reason.cmake</a><ul>
+<li><a class="reference internal" href="#reasonable-cmake-for-c">Reasonable CMake for C++</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
-
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Introduction.html"
-                        title="next chapter">Introduction</a></p>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="Introduction.html" title="next chapter">Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -110,21 +123,20 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="Introduction.html" title="Introduction"
-             >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">reason.cmake 0.1.0 documentation</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2017, Adam Basfop Cavendish.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Adam Basfop Cavendish.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
-    </div>
+
+    
+
+    
   </body>
 </html>
