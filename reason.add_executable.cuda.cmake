@@ -56,7 +56,7 @@ function(reason__add_executable__impl)
 
   reason__extract_INCLUDE_DIRECTORIES_to_CUDA_INCLUDE("${DUMMY_NAME}")
   reason__extract_COMPILE_DEFINITIONS_to_NVCC_FLAGS("${DUMMY_NAME}")
-  
+
   reason__add_executable__add_executable("${reason_TARGET}" "${reason_SRCS}")
   reason__add_executable__tinclude_dirs("${reason_TARGET}" "${reason_INC_DIRS}")
   reason__add_executable__tlink_libs("${reason_TARGET}" "${reason_LINKS}")

@@ -12,7 +12,7 @@ description:
   simply wrap 'add_executable', 'target_include_directories', and 'target_link_libraries'
   setup rpath, and use cotire if possible
 example:
-  1. Simple, mostly used 
+  1. Simple, mostly used
      reason_add_executable(TARGET demo1 SRCS "src/main.cpp" INC_DIRS "include" LINKS mylib_d)
   2. executable with extra compile definitions
      reason_add_executable(TARGET demo1 SRCS "src/main.cpp" INC_DIRS "include" DEFINES NDEBUG MY_FLAG=1)

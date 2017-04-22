@@ -3,7 +3,7 @@ macro(reason_define_colors)
     string(ASCII 27 ESC)
     set(c_reset    "${ESC}[m")
     set(c_bold     "${ESC}[1m")
-    
+
     set(c_black    "${ESC}[30m")
     set(c_maroon   "${ESC}[31m")
     set(c_green    "${ESC}[32m")
@@ -40,7 +40,7 @@ macro(reason_define_colors)
   else()
     set(c_reset    "")
     set(c_bold     "")
-    
+
     set(c_black    "")
     set(c_maroon   "")
     set(c_green    "")
