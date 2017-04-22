@@ -2,6 +2,10 @@ if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 3.3)
    message(FATAL_ERROR "CMake >= 3.3 required")
 endif()
 
+if(DEFINED REASON_MODULE_DIR)
+  return()
+endif()
+
 # Use to specify where the 'reason.cmake' directory is
 set(REASON_MODULE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
