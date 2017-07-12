@@ -14,18 +14,18 @@ set(REASON_MODULE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 include(cotire OPTIONAL)
 
 # Reasonable CMake Project
-include("reason.properties")
-include("reason.color")
-include("reason.util")
+include("${REASON_MODULE_DIR}/reason.properties.cmake")
+include("${REASON_MODULE_DIR}/reason.color.cmake")
+include("${REASON_MODULE_DIR}/reason.util.cmake")
 
 reason_verbose("reason verbose: ON")
 
-include("reason.add_library")
-include("reason.add_interface_library")
-include("reason.add_executable")
-include("reason.install")
-include("reason.add_multiple_tests")
-include("reason.pack_deb")
+include("${REASON_MODULE_DIR}/reason.add_library.cmake")
+include("${REASON_MODULE_DIR}/reason.add_interface_library.cmake")
+include("${REASON_MODULE_DIR}/reason.add_executable.cmake")
+include("${REASON_MODULE_DIR}/reason.install.cmake")
+include("${REASON_MODULE_DIR}/reason.add_multiple_tests.cmake")
+include("${REASON_MODULE_DIR}/reason.pack_deb.cmake")
 
 reason_message(STATUS "reason loaded")
 

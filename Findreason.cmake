@@ -1,0 +1,12 @@
+set(REASON_VERBOSE FALSE)
+set(REASON_BRIEF_PATH FALSE)
+
+if(IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/reason.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/reason.cmake/reason.cmake")
+elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/reason.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/reason.cmake")
+else()
+  unset(REASON_VERBOSE)
+  unset(REASON_BRIEF_PATH)
+  message(FATAL_ERROR "reason.cmake is not found. Please visit: 'https://github.com/adamcavendish/reason.cmake' for reference")
+endif()
